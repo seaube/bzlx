@@ -52,7 +52,7 @@ auto module_in_local_workspace(const bazel_label_info& label) -> bool {
 }
 
 auto run_workspace_module(
-	const bazel_label_info& label,
+	const bazel_label_info&         label,
 	const std::vector<std::string>& args
 ) -> int {
 	// TODO
@@ -65,7 +65,7 @@ auto download_global_module(const bazel_label_info& label) -> int {
 }
 
 auto run_global_module(
-	const bazel_label_info& label,
+	const bazel_label_info&         label,
 	const std::vector<std::string>& args
 ) -> int {
 	// TODO
@@ -80,16 +80,18 @@ auto main(int argc, char* argv[], char** envp) -> int {
 
 	auto label = parse_label_string(argv[1]);
 
-	std::cout << "workspace_name: " << label.workspace_name << "\n"
-						<< "package_name: " << label.package_name << "\n"
-						<< "target_name: " << label.target_name << "\n";
+	std::cout //
+		<< "workspace_name: " << label.workspace_name << "\n"
+		<< "package_name: " << label.package_name << "\n"
+		<< "target_name: " << label.target_name << "\n";
 
 	if(label.workspace_name.empty()) {
-		std::cerr << "[ERROR] bazel label must have module name\n\n"
-							<< "        examples: bzlx @example\n"
-							<< "                  bzlx @example//package/path\n"
-							<< "                  bzlx @example//package/path:target\n"
-							<< "\n";
+		std::cerr //
+			<< "[ERROR] bazel label must have module name\n\n"
+			<< "        examples: bzlx @example\n"
+			<< "                  bzlx @example//package/path\n"
+			<< "                  bzlx @example//package/path:target\n"
+			<< "\n";
 		return 1;
 	}
 

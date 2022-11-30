@@ -1,11 +1,11 @@
 AccessModifierOffset: -2
 AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
+AlignConsecutiveDeclarations: true
 AlignEscapedNewlines: Left
 AlignOperands: DontAlign
 AlignTrailingComments: false
-AllowAllArgumentsOnNextLine: true
+AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
@@ -50,11 +50,11 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
-FixNamespaceComments: false
+FixNamespaceComments: true
 IncludeBlocks: Preserve
 IncludeIsMainRegex: "(Test)?$"
-IndentCaseLabels: false
-IndentPPDirectives: None
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
 IndentWidth: 2
 IndentWrappedFunctionNames: false
 InsertBraces: true
@@ -71,8 +71,8 @@ PenaltyBreakBeforeFirstCallParameter: 30
 PenaltyBreakComment: 10
 PenaltyBreakFirstLessLess: 0
 PenaltyBreakString: 10
-PenaltyExcessCharacter: 100
-PenaltyReturnTypeOnItsOwnLine: 60
+PenaltyExcessCharacter: 400
+PenaltyReturnTypeOnItsOwnLine: 350
 PointerAlignment: Left
 ReflowComments: true
 RequiresClausePosition: OwnLine
@@ -93,6 +93,7 @@ SpacesInContainerLiterals: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
+SeparateDefinitionBlocks: Always
 Standard: Latest
 TabWidth: 2
 UseTab: ForContinuationAndIndentation
