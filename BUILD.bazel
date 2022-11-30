@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("//bazel:copts.bzl", "copts")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "bzlx",
+    copts = copts,
+    srcs = glob(["bzlx/*.cc", "bzlx/*.hh"]),
+)

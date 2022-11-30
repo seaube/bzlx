@@ -1,0 +1,7 @@
+/bazel-*
+/external
+/compile_commands.json
+/.cache/
+/user.bazelrc
+/.wsc/wsc
+/.wsc/wsc.exe
