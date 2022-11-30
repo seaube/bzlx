@@ -4,11 +4,19 @@
 #include <string>
 #include <array>
 #include <filesystem>
+#include <fstream>
 #include <boost/process.hpp>
 
 namespace fs = std::filesystem;
 namespace bp = boost::process;
 using namespace std::string_literals;
+
+constexpr auto GLOBAL_MODULE_CONTENTS = R"(
+module(
+    name = "bzlx_global_module",
+    version = "0.1.0",
+)
+)";
 
 struct bazel_label_info {
 	std::string target_name;
@@ -98,17 +106,50 @@ auto run_workspace_module(
 	return bp::system(bp::exe(bazel), bp::args(run_args));
 }
 
-auto download_global_module(const bazel_label_info& label) -> int {
-	// TODO
+auto download_global_module(const bazel_label_info& label, const fs::path& dir)
+	-> int {
+	if(!fs::exists(dir)) {
+		fs::create_directories(dir);
+	}
+
+	std::ofstream module_bzl(dir / "MODULE.bazel");
+
+	// TODO(zaucy): get version
+	std::string dep_version = "";
+	if(label.workspace_name == "gazelle") {
+		dep_version = "0.28.0";
+	}
+
+	module_bzl //
+		<< GLOBAL_MODULE_CONTENTS
+		<< "bazel_dep("
+		<< "name=\"" << label.workspace_name << "\", "
+		<< "version=\"" << dep_version << "\")\n";
+
 	return 0;
 }
 
 auto run_global_module(
 	const bazel_label_info&         label,
-	const std::vector<std::string>& args
+	const std::vector<std::string>& args,
+	fs::path                        dir
 ) -> int {
-	// TODO
-	return 0;
+	auto bazel = bp::search_path("bazel");
+	return bp::system(
+		bp::exe(bazel),
+		bp::start_dir(dir.string()),
+		bp::args({"run"s, label.to_string()})
+	);
+}
+
+auto find_global_module_directory() -> fs::path {
+	fs::path home_dir;
+#if _WIN32
+	home_dir = std::getenv("USERPROFILE");
+#else
+	home_dir = std::getenv("HOME");
+#endif
+	return home_dir / ".bzlx/";
 }
 
 auto main(int argc, char* argv[], char** envp) -> int {
@@ -141,9 +182,12 @@ auto main(int argc, char* argv[], char** envp) -> int {
 		return run_workspace_module(label, run_args);
 	}
 
-	if(auto exit_code = download_global_module(label); exit_code != 0) {
+	auto global_module_dir = find_global_module_directory();
+
+	if(auto exit_code = download_global_module(label, global_module_dir);
+		 exit_code != 0) {
 		return exit_code;
 	}
 
-	return run_global_module(label, run_args);
+	return run_global_module(label, run_args, global_module_dir);
 }
