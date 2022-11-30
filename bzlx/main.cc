@@ -80,11 +80,6 @@ auto main(int argc, char* argv[], char** envp) -> int {
 
 	auto label = parse_label_string(argv[1]);
 
-	std::cout //
-		<< "workspace_name: " << label.workspace_name << "\n"
-		<< "package_name: " << label.package_name << "\n"
-		<< "target_name: " << label.target_name << "\n";
-
 	if(label.workspace_name.empty()) {
 		std::cerr //
 			<< "[ERROR] bazel label must have module name\n\n"
