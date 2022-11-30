@@ -95,16 +95,7 @@ auto run_workspace_module(
 	run_args.insert(run_args.end(), fixed_args.begin(), fixed_args.end());
 	run_args.insert(run_args.end(), args.begin(), args.end());
 
-	bp::child child(
-		bp::exe(bazel),
-		bp::args(run_args),
-		bp::std_err > stdout,
-		bp::std_err > stderr,
-		bp::std_in < stdin
-	);
-	child.wait();
-
-	return child.exit_code();
+	return bp::system(bp::exe(bazel), bp::args(run_args));
 }
 
 auto download_global_module(const bazel_label_info& label) -> int {
