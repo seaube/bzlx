@@ -6,6 +6,7 @@ build --incompatible_strict_action_env
 
 build:windows --platforms=//bazel/platforms:windows
 build:linux --platforms=//bazel/platforms:linux
+build:linux --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
 
 # build --workspace_status_command=./.wsc/wsc.sh # added by wsc init
 # build:windows --workspace_status_command=./.wsc/wsc.cmd # added by wsc init

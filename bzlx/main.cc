@@ -2,14 +2,22 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <array>
 #include <filesystem>
+#include <boost/process.hpp>
 
 namespace fs = std::filesystem;
+namespace bp = boost::process;
+using namespace std::string_literals;
 
 struct bazel_label_info {
 	std::string target_name;
 	std::string package_name;
 	std::string workspace_name;
+
+	std::string to_string() const {
+		return "@" + workspace_name + "//" + package_name + ":" + target_name;
+	}
 };
 
 bazel_label_info parse_label_string(const std::string& label_str) {
@@ -47,16 +55,56 @@ bazel_label_info parse_label_string(const std::string& label_str) {
 }
 
 auto module_in_local_workspace(const bazel_label_info& label) -> bool {
-	// TODO
-	return false;
+	auto bazel = bp::search_path("bazel");
+
+	bp::child child(
+		bp::exe(bazel),
+		bp::args({
+			"query"s,
+			"--ui_event_filters=-info,-stdout,-stderr"s,
+			"--noshow_progress"s,
+			label.to_string(),
+		})
+	);
+	child.wait();
+
+	auto exit_code = child.exit_code();
+	if(exit_code != 0) {
+		return false;
+	}
+
+	return true;
 }
 
 auto run_workspace_module(
 	const bazel_label_info&         label,
 	const std::vector<std::string>& args
 ) -> int {
-	// TODO
-	return 0;
+	auto bazel = bp::search_path("bazel");
+
+	const std::array fixed_args{
+		"run"s,
+		"--ui_event_filters=-info,-stdout,-stderr"s,
+		"--noshow_progress"s,
+		label.to_string(),
+		" -- "s,
+	};
+
+	std::vector<std::string> run_args;
+	run_args.reserve(args.size() + fixed_args.size());
+	run_args.insert(run_args.end(), fixed_args.begin(), fixed_args.end());
+	run_args.insert(run_args.end(), args.begin(), args.end());
+
+	bp::child child(
+		bp::exe(bazel),
+		bp::args(run_args),
+		bp::std_err > stdout,
+		bp::std_err > stderr,
+		bp::std_in < stdin
+	);
+	child.wait();
+
+	return child.exit_code();
 }
 
 auto download_global_module(const bazel_label_info& label) -> int {

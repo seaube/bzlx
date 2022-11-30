@@ -5,6 +5,12 @@ package(default_visibility = ["//visibility:public"])
 
 cc_binary(
     name = "bzlx",
+    srcs = glob([
+        "bzlx/*.cc",
+        "bzlx/*.hh",
+    ]),
     copts = copts,
-    srcs = glob(["bzlx/*.cc", "bzlx/*.hh"]),
+    deps = [
+        "@boost//libs/process",
+    ],
 )

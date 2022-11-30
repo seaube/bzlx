@@ -1,0 +1,24 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "run //:bzlx",
+			"request": "launch",
+			"program": "${workspaceFolder}/bazel-bin/bzlx",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"@bzlx"
+			],
+			"type": "cppdbg",
+			"windows": {
+				"type": "cppvsdbg",
+				"program": "${workspaceFolder}/bazel-bin/bzlx.exe"
+			},
+			"preLaunchTask": "build //:bzlx",
+			"sourceFileMap": {
+				"E:/.cache/bazel/output_base/execroot/_main": "${workspaceFolder}",
+			}
+		}
+	],
+	"compounds": []
+}

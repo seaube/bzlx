@@ -11,5 +11,15 @@
 			],
 			"problemMatcher": []
 		},
+		{
+			"label": "build //:bzlx",
+			"command": "bazel",
+			"type": "shell",
+			"args": [
+				"build",
+				"//:bzlx"
+			],
+			"problemMatcher": []
+		}
 	],
 }
