@@ -121,8 +121,7 @@ auto download_global_module(const bazel_label_info& label, const fs::path& dir)
 	}
 
 	module_bzl //
-		<< GLOBAL_MODULE_CONTENTS
-		<< "bazel_dep("
+		<< GLOBAL_MODULE_CONTENTS << "bazel_dep("
 		<< "name=\"" << label.workspace_name << "\", "
 		<< "version=\"" << dep_version << "\")\n";
 
